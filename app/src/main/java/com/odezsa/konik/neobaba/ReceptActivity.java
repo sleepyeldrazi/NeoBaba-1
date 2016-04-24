@@ -37,27 +37,65 @@ public class ReceptActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recept);
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl);
+        LinearLayout list = new LinearLayout(this);
 
         Button bt[] = new Button[2];
+        list.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+
+
+
+        for(int j=0; j<bt.length; j++){
+            bt[j] = new Button(this);
+            bt[j].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            bt[j].setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            bt[j].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+
+        }
+
+        bt[0].setText(R.string.poparaName);
+        bt[1].setText(R.string.omletName);
+
+
 
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
         if(MainActivity.checkFood(2) && MainActivity.checkFood(0)){
             //bt[0].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            bt[0].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            bt[0].setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            bt[0].setText(R.string.poparaName);
-            bt[0].setOnClickListener();
-            rl.addView(bt[0],new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
+
+            bt[0].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (MainActivity.checkFood(2) && MainActivity.checkFood(0)) {
+                        receptId = 0;
+                        Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
+                        startActivity(i);
+
+                    }
+                }
+            });
+
+            list.addView(bt[0]);
+
 
         }
 
         if(MainActivity.checkFood(4) && MainActivity.checkFood(5)){
-            bt[1].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
-            bt[1].setText(R.string.omletName);
+            bt[1].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+                        receptId = 1;
+                        Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
+                        startActivity(i);
+
+                    }
+                }
+            });
+            list.addView(bt[1]);
         }
 
-
+        rl.addView(list);
 
        /* 
             <Button
