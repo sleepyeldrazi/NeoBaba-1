@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     public MenuItem items[];
     public Menu testMenu;
     public static boolean food[] = new boolean[6];
+    public ImageView foodImg[] = new ImageView[6];
 
     public static boolean checkFood(int i){
         return food[i];
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
 
-        ImageView foodImg[] = new ImageView[6];
+
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
 
@@ -102,31 +103,36 @@ public class MainActivity extends AppCompatActivity
             if(testMenu.findItem(R.id.mill) == null) {
                 testMenu.add(0, R.id.mill, counter, "Мляко");
                 food[5] = true;
+                foodImg[5].setBackgroundColor(getResources().getColor(R.color.checked));
             }
             else{
                 food[5] = false;
                 testMenu.removeItem(R.id.mill);
+                foodImg[5].setBackgroundColor(0);
             }
 
         }
     public void PressMeHleb(View view){
         if(testMenu.findItem(R.id.helb) == null){
             food[0] = true;
-
+            foodImg[0].setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.helb, counter, "Хляб");}
         else {
             testMenu.removeItem(R.id.helb);
+            foodImg[0].setBackgroundColor(0);
             food[0]=false;
         }
     }
     public void PressMeTomato(View view){
 
         if(testMenu.findItem(R.id.tomato) == null) {
+            foodImg[1].setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.tomato, counter, "Домати");
             food[1] = true;
         }
         else {
             testMenu.removeItem(R.id.tomato);
+            foodImg[1].setBackgroundColor(0);
             food[1]=false;
         }
     }
@@ -135,16 +141,19 @@ public class MainActivity extends AppCompatActivity
     public void PressMeQco(View view){
 
         if(testMenu.findItem(R.id.qco) == null) {
+            foodImg[4].setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.qco, counter, "Яица");
             food[4] = true;
         }
         else {
+            foodImg[4].setBackgroundColor(0);
             food[4] = false;
             testMenu.removeItem(R.id.qco);
         }
     }
     public void PressMeSir(View view){
         if(testMenu.findItem(R.id.sir) == null) {
+            foodImg[2].setBackgroundColor(getResources().getColor(R.color.checked));
             food[2] = true;
 
             testMenu.add(0, R.id.sir, counter, "Сирене");
@@ -152,16 +161,19 @@ public class MainActivity extends AppCompatActivity
         else {
             food[2] = false;
             testMenu.removeItem(R.id.sir);
+            foodImg[2].setBackgroundColor(0);
         }
     }
     public void PressMeKash(View view){
         if(testMenu.findItem(R.id.kash) == null) {
+            foodImg[3].setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.kash, counter, "Кашкавал");
             food[3] = true;
         }
         else {
             food[3] = false;
             testMenu.removeItem(R.id.kash);
+            foodImg[3].setBackgroundColor(0);
         }
     }
 

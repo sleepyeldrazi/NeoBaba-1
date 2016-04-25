@@ -37,10 +37,10 @@ public class ReceptActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recept);
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl);
-        LinearLayout list = new LinearLayout(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         Button bt[] = new Button[2];
-        list.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+
 
 
 
@@ -48,7 +48,8 @@ public class ReceptActivity extends AppCompatActivity {
             bt[j] = new Button(this);
             bt[j].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             bt[j].setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            bt[j].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            //bt[j].setLayoutParams(params);
+            bt[j].setId(j);
 
 
         }
@@ -57,45 +58,49 @@ public class ReceptActivity extends AppCompatActivity {
         bt[1].setText(R.string.omletName);
 
 
+        bt[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MainActivity.checkFood(2) && MainActivity.checkFood(0)) {
+                    receptId = 0;
+                    Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
+                    startActivity(i);
 
+                }
+            }
+        });
+
+
+
+
+
+        bt[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+                    receptId = 1;
+                    Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
+                    startActivity(i);
+
+                }
+            }
+        });
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
         if(MainActivity.checkFood(2) && MainActivity.checkFood(0)){
-            //bt[0].setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-
-            bt[0].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (MainActivity.checkFood(2) && MainActivity.checkFood(0)) {
-                        receptId = 0;
-                        Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-                        startActivity(i);
-
-                    }
-                }
-            });
-
-            list.addView(bt[0]);
-
+            System.out.println(bt[0].getId());
+            rl.addView(bt[0], new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+            params.setMargins(0, 200, 0, 0);
 
         }
 
-        if(MainActivity.checkFood(4) && MainActivity.checkFood(5)){
-            bt[1].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
-                        receptId = 1;
-                        Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-                        startActivity(i);
+        if(MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+            System.out.println(bt[1].getId());
+            rl.addView(bt[1], params);
 
-                    }
-                }
-            });
-            list.addView(bt[1]);
         }
 
-        rl.addView(list);
+
 
        /* 
             <Button
