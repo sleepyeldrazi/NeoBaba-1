@@ -26,6 +26,7 @@ public class ReceptActivity extends AppCompatActivity {
 
     private ListView lv;
     public static int receptId;
+    public static int count=0;
 
     public static int getReceptId() {
         return receptId;
@@ -48,7 +49,6 @@ public class ReceptActivity extends AppCompatActivity {
             bt[j] = new Button(this);
             bt[j].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             bt[j].setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            //bt[j].setLayoutParams(params);
             bt[j].setId(j);
 
 
@@ -71,9 +71,6 @@ public class ReceptActivity extends AppCompatActivity {
         });
 
 
-
-
-
         bt[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,69 +85,20 @@ public class ReceptActivity extends AppCompatActivity {
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
         if(MainActivity.checkFood(2) && MainActivity.checkFood(0)){
-            System.out.println(bt[0].getId());
+            params.setMargins(0, count*150, 0, 0);
+           
             rl.addView(bt[0], new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-            params.setMargins(0, 200, 0, 0);
+            count++;
 
         }
 
         if(MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
-            System.out.println(bt[1].getId());
+            params.setMargins(0, count*150, 0, 0);
             rl.addView(bt[1], params);
-
+            count++;
         }
-
-
-
-       /* 
-            <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/current_recept"
-        android:id="@+id/button"
-        android:textAlignment="center"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorPrimaryDark"
-        android:onClick="clickMe"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
-
-       lv = (ListView) findViewById(R.id.recepti);
-
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                receptId = position;
-                Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-                startActivity(i);
-            }
-        });*/
-
-
     }
 
-
-
-    public void clickMe(View view){
-        if(MainActivity.checkFood(2) && MainActivity.checkFood(0)){
-            receptId = 0;
-            Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-            startActivity(i);
-
-        }
-        //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-        if(MainActivity.checkFood(4) && MainActivity.checkFood(5)){
-            receptId = 1;
-            Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-            startActivity(i);
-
-        }
-
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
