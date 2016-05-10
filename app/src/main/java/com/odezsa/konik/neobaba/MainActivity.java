@@ -1,8 +1,6 @@
 package com.odezsa.konik.neobaba;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,29 +14,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static int counter = 0;
-    public MenuItem items[];
     public Menu testMenu;
-    public static boolean food[] = new boolean[6];
-    public ImageView foodImg[] = new ImageView[6];
+    public Food food[] = new Food[6];
 
-    public static boolean checkFood(int i){
-        return food[i];
+    public boolean checkFood(int i){
+        if(food[i].isChecked) return true;
+        else return false;
+
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        for(int i=0; i<6; i++){
-            food[i]=false;
-        }
+        //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
+        food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
+        food[1] = new Food("Домат", (ImageView)findViewById(R.id.tomato));
+        food[2] = new Food("Сирене", (ImageView)findViewById(R.id.sir));
+        food[3] = new Food("Кашкавал", (ImageView)findViewById(R.id.kash));
+        food[4] = new Food("Яица", (ImageView)findViewById(R.id.qco));
+        food[5] = new Food("Мляко", (ImageView)findViewById(R.id.mill));
+
+
+
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -52,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "This will be useful soon enough.", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Избери продуктите си и натисни синия бутон.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -74,23 +79,21 @@ public class MainActivity extends AppCompatActivity
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
 
-        foodImg[0] = (ImageView) findViewById(R.id.helb);
-        foodImg[1] = (ImageView) findViewById(R.id.tomato);
-        foodImg[2] = (ImageView) findViewById(R.id.sir);
-        foodImg[3] = (ImageView) findViewById(R.id.kash);
-        foodImg[4] = (ImageView) findViewById(R.id.qco);
-        foodImg[5] = (ImageView) findViewById(R.id.mill);
+
+        ImageView but = (ImageView) findViewById(R.id.but);
+        but.getLayoutParams().width = but.getLayoutParams().height;
 
 
-        int imgSize = (int) (displaymetrics.widthPixels * 0.4);
+        int imgSize = (int) (displaymetrics.widthPixels * 0.35);
 
-        for(int i=0; i<foodImg.length; i++ ){
-            foodImg[i].getLayoutParams().height = imgSize;
-            foodImg[i].getLayoutParams().width = imgSize;
+        for(int i=0; i<food.length; i++ ){
+            food[i].getImg().getLayoutParams().height = imgSize;
+            food[i].getImg().getLayoutParams().width = imgSize;
         }
+        imgSize = (int) (displaymetrics.widthPixels * 0.2);
+        but.getLayoutParams().width = imgSize;
+        but.getLayoutParams().height =(int) (imgSize * 0.9);
 
-
-        System.out.println("Menu ID: " + R.id.chosenMenu);
 
     }
 
@@ -102,38 +105,38 @@ public class MainActivity extends AppCompatActivity
         public void PressMeMilk(View view){
             if(testMenu.findItem(R.id.mill) == null) {
                 testMenu.add(0, R.id.mill, counter, "Мляко");
-                food[5] = true;
-                foodImg[5].setBackgroundColor(getResources().getColor(R.color.checked));
+                food[5].setIsChecked(true);
+                food[5].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
             }
             else{
-                food[5] = false;
+                food[5].setIsChecked(true);
                 testMenu.removeItem(R.id.mill);
-                foodImg[5].setBackgroundColor(0);
+                food[5].getImg().setBackgroundColor(0);
             }
 
         }
     public void PressMeHleb(View view){
         if(testMenu.findItem(R.id.helb) == null){
-            food[0] = true;
-            foodImg[0].setBackgroundColor(getResources().getColor(R.color.checked));
+            food[0].setIsChecked(true);
+            food[0].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.helb, counter, "Хляб");}
         else {
             testMenu.removeItem(R.id.helb);
-            foodImg[0].setBackgroundColor(0);
-            food[0]=false;
+            food[0].getImg().setBackgroundColor(0);
+            food[0].setIsChecked(true);
         }
     }
     public void PressMeTomato(View view){
 
         if(testMenu.findItem(R.id.tomato) == null) {
-            foodImg[1].setBackgroundColor(getResources().getColor(R.color.checked));
+            food[1].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.tomato, counter, "Домати");
-            food[1] = true;
+            food[1].setIsChecked(true);
         }
         else {
             testMenu.removeItem(R.id.tomato);
-            foodImg[1].setBackgroundColor(0);
-            food[1]=false;
+            food[1].getImg().setBackgroundColor(0);
+            food[1].setIsChecked(true);
         }
     }
 
@@ -141,39 +144,39 @@ public class MainActivity extends AppCompatActivity
     public void PressMeQco(View view){
 
         if(testMenu.findItem(R.id.qco) == null) {
-            foodImg[4].setBackgroundColor(getResources().getColor(R.color.checked));
+            food[4].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.qco, counter, "Яица");
-            food[4] = true;
+            food[4].setIsChecked(true);
         }
         else {
-            foodImg[4].setBackgroundColor(0);
-            food[4] = false;
+            food[4].getImg().setBackgroundColor(0);
+            food[4].setIsChecked(true);
             testMenu.removeItem(R.id.qco);
         }
     }
     public void PressMeSir(View view){
         if(testMenu.findItem(R.id.sir) == null) {
-            foodImg[2].setBackgroundColor(getResources().getColor(R.color.checked));
-            food[2] = true;
+            food[2].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
+            food[2].setIsChecked(true);
 
             testMenu.add(0, R.id.sir, counter, "Сирене");
         }
         else {
-            food[2] = false;
+            food[2].setIsChecked(true);
             testMenu.removeItem(R.id.sir);
-            foodImg[2].setBackgroundColor(0);
+            food[2].getImg().setBackgroundColor(0);
         }
     }
     public void PressMeKash(View view){
         if(testMenu.findItem(R.id.kash) == null) {
-            foodImg[3].setBackgroundColor(getResources().getColor(R.color.checked));
+            food[3].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
             testMenu.add(0, R.id.kash, counter, "Кашкавал");
-            food[3] = true;
+            food[3].setIsChecked(true);
         }
         else {
-            food[3] = false;
+            food[3].setIsChecked(true);
             testMenu.removeItem(R.id.kash);
-            foodImg[3].setBackgroundColor(0);
+            food[3].getImg().setBackgroundColor(0);
         }
     }
 
