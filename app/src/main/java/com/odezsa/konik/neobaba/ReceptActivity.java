@@ -15,6 +15,7 @@ public class ReceptActivity extends MainActivity {
 
     private ListView lv;
     public static int receptId;
+    public static int count=0;
 
     public static int getReceptId() {
         return receptId;
@@ -37,7 +38,6 @@ public class ReceptActivity extends MainActivity {
             bt[j] = new Button(this);
             bt[j].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             bt[j].setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            //bt[j].setLayoutParams(params);
             bt[j].setId(j);
 
 
@@ -60,9 +60,6 @@ public class ReceptActivity extends MainActivity {
         });
 
 
-
-
-
         bt[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,52 +73,33 @@ public class ReceptActivity extends MainActivity {
         });
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
+<<<<<<< HEAD
         if(checkFood(2) && checkFood(0)){
             System.out.println(bt[0].getId());
+=======
+        if(MainActivity.checkFood(2) && MainActivity.checkFood(0)){
+            params.setMargins(0, count*150, 0, 0);
+           
+>>>>>>> origin/master
             rl.addView(bt[0], new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-            params.setMargins(0, 200, 0, 0);
+            count++;
 
         }
 
+<<<<<<< HEAD
         if(checkFood(4) && checkFood(5)) {
             System.out.println(bt[1].getId());
+=======
+        if(MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+            params.setMargins(0, count*150, 0, 0);
+>>>>>>> origin/master
             rl.addView(bt[1], params);
-
+            count++;
         }
-
-
-
-       /* 
-            <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/current_recept"
-        android:id="@+id/button"
-        android:textAlignment="center"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorPrimaryDark"
-        android:onClick="clickMe"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
-
-       lv = (ListView) findViewById(R.id.recepti);
-
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                receptId = position;
-                Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-                startActivity(i);
-            }
-        });*/
-
-
     }
 
 
+<<<<<<< HEAD
 
     public void clickMe(View view){
         if(checkFood(2) && checkFood(0)){
@@ -141,6 +119,8 @@ public class ReceptActivity extends MainActivity {
 
     }
 
+=======
+>>>>>>> origin/master
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
