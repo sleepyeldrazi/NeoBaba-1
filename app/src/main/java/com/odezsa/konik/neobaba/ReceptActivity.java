@@ -73,33 +73,28 @@ public class ReceptActivity extends MainActivity {
         });
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-<<<<<<< HEAD
         if(checkFood(2) && checkFood(0)){
             System.out.println(bt[0].getId());
-=======
-        if(MainActivity.checkFood(2) && MainActivity.checkFood(0)){
+
+        if(checkFood(2) && checkFood(0)){
             params.setMargins(0, count*150, 0, 0);
-           
->>>>>>> origin/master
             rl.addView(bt[0], new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
             count++;
 
         }
 
-<<<<<<< HEAD
+
         if(checkFood(4) && checkFood(5)) {
             System.out.println(bt[1].getId());
-=======
-        if(MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+
+        if(checkFood(4) && checkFood(5)) {
             params.setMargins(0, count*150, 0, 0);
->>>>>>> origin/master
+
             rl.addView(bt[1], params);
             count++;
         }
     }
 
-
-<<<<<<< HEAD
 
     public void clickMe(View view){
         if(checkFood(2) && checkFood(0)){
@@ -119,8 +114,7 @@ public class ReceptActivity extends MainActivity {
 
     }
 
-=======
->>>>>>> origin/master
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
