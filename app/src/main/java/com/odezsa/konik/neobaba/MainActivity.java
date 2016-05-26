@@ -21,9 +21,9 @@ public class MainActivity extends AppCompatActivity
 
     public static int counter = 0;
     public Menu testMenu;
-    public Food food[] = new Food[6];
+    public static Food food[] = new Food[6];
 
-    public boolean checkFood(int i){
+    public static boolean checkFood(int i){
         if(food[i].isChecked) return true;
         else return false;
 
@@ -31,20 +31,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-        food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
-        food[1] = new Food("Домат", (ImageView)findViewById(R.id.tomato));
-        food[2] = new Food("Сирене", (ImageView)findViewById(R.id.sir));
-        food[3] = new Food("Кашкавал", (ImageView)findViewById(R.id.kash));
-        food[4] = new Food("Яица", (ImageView)findViewById(R.id.qco));
-        food[5] = new Food("Мляко", (ImageView)findViewById(R.id.mill));
-
-
-
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,7 +60,13 @@ public class MainActivity extends AppCompatActivity
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
-
+        //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
+        food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
+        food[1] = new Food("Домат", (ImageView)findViewById(R.id.tomato));
+        food[2] = new Food("Сирене", (ImageView)findViewById(R.id.sir));
+        food[3] = new Food("Кашкавал", (ImageView)findViewById(R.id.kash));
+        food[4] = new Food("Яица", (ImageView)findViewById(R.id.qco));
+        food[5] = new Food("Мляко", (ImageView)findViewById(R.id.mill));
 
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko

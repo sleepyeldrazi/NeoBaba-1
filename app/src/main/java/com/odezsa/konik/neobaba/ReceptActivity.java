@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 
-public class ReceptActivity extends MainActivity {
+public class ReceptActivity extends AppCompatActivity {
 
     private ListView lv;
     public static int receptId;
@@ -32,9 +32,7 @@ public class ReceptActivity extends MainActivity {
         Button bt[] = new Button[2];
 
 
-
-
-        for(int j=0; j<bt.length; j++){
+        for (int j = 0; j < bt.length; j++) {
             bt[j] = new Button(this);
             bt[j].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             bt[j].setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -50,7 +48,7 @@ public class ReceptActivity extends MainActivity {
         bt[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkFood(2) && checkFood(0)) {
+                if (MainActivity.checkFood(2) && MainActivity.checkFood(0)) {
                     receptId = 0;
                     Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
                     startActivity(i);
@@ -63,7 +61,7 @@ public class ReceptActivity extends MainActivity {
         bt[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkFood(4) && checkFood(5)) {
+                if (MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
                     receptId = 1;
                     Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
                     startActivity(i);
@@ -73,67 +71,69 @@ public class ReceptActivity extends MainActivity {
         });
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-        if(checkFood(2) && checkFood(0)){
+        if (MainActivity.checkFood(2) && MainActivity.checkFood(0)) {
             System.out.println(bt[0].getId());
 
-        if(checkFood(2) && checkFood(0)){
-            params.setMargins(0, count*150, 0, 0);
-            rl.addView(bt[0], new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-            count++;
+            if (MainActivity.checkFood(2) && MainActivity.checkFood(0)) {
+                params.setMargins(0, count * 150, 0, 0);
+                rl.addView(bt[0], new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+                count++;
 
-        }
+            }
 
 
-        if(checkFood(4) && checkFood(5)) {
-            System.out.println(bt[1].getId());
+            if (MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+                System.out.println(bt[1].getId());
 
-        if(checkFood(4) && checkFood(5)) {
-            params.setMargins(0, count*150, 0, 0);
+                if (MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+                    params.setMargins(0, count * 150, 0, 0);
 
-            rl.addView(bt[1], params);
-            count++;
+                    rl.addView(bt[1], params);
+                    count++;
+                }
+            }
         }
     }
 
 
-    public void clickMe(View view){
-        if(checkFood(2) && checkFood(0)){
-            receptId = 0;
-            Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-            startActivity(i);
+        public void clickMe (View view){
+            if (MainActivity.checkFood(2) && MainActivity.checkFood(0)) {
+                receptId = 0;
+                Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
+                startActivity(i);
+
+            }
+            //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
+            if (MainActivity.checkFood(4) && MainActivity.checkFood(5)) {
+                receptId = 1;
+                Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
+                startActivity(i);
+
+            }
+
 
         }
-        //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-        if(checkFood(4) && checkFood(5)){
-            receptId = 1;
-            Intent i = new Intent(ReceptActivity.this, ReceptaActivity.class);
-            startActivity(i);
-
-        }
 
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recept, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        @Override
+        public boolean onCreateOptionsMenu (Menu menu){
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_recept, menu);
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
-}
+        @Override
+        public boolean onOptionsItemSelected (MenuItem item){
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
+
+            //noinspection SimplifiableIfStatement
+            if (id == R.id.action_settings) {
+                return true;
+            }
+
+            return super.onOptionsItemSelected(item);
+        }
+        }
