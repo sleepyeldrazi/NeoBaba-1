@@ -5,7 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="start_search">Намери рецепта!</string>
     <string name="search_title">Намери продукт</string>
-    <string name="search_hint">Hint!</string>
+    <string name="hint_search">Hint!</string>
 
     <string-array name="recepti">
         <item>Popara</item>

@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -30,7 +32,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     public static int counter = 0;
     private final int  NUM_COL= 3;
@@ -115,6 +117,17 @@ public class MainActivity extends AppCompatActivity
         ProductAdapter productAdapter = new ProductAdapter(this, productCursor);
         searchView.setSuggestionsAdapter(productAdapter);
 
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            // Handle the normal search query case
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Cursor c = myDbHelper.getWordMatches(query, null);
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            // Handle a suggestions click (because the suggestions all use ACTION_VIEW)
+            Uri data = intent.getData();
+            //showResult(data);
+        }
+
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
         /*food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
         food[1] = new Food("Домат", (ImageView)findViewById(R.id.tomato));
@@ -152,6 +165,7 @@ public class MainActivity extends AppCompatActivity
             Cursor c = myDbHelper.getWordMatches(query, null);
             //process Cursor and display results
         }
+    }
 
         public void startSearch(View view){
             Intent i = new Intent(MainActivity.this, ReceptActivity.class);
@@ -183,15 +197,26 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-       /* MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        */
+        getMenuInflater().inflate(R.menu.main, menu);
 
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
 
         return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        // User pressed the search button
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        // User changed the text
+        return false;
     }
 
     @Override
@@ -221,7 +246,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private class SuggestionsAdapter extends CursorAdapter {
+  /*  private class SuggestionsAdapter extends CursorAdapter {
 
         public SuggestionsAdapter(Context context, Cursor c) {
             super(context, c, 0);
@@ -240,5 +265,5 @@ public class MainActivity extends AppCompatActivity
             final int textIndex = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1);
             tv.setText(cursor.getString(textIndex));
         }
-    }
+    }*/
 }
