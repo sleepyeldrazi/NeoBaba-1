@@ -19,10 +19,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        handleIntent(getIntent());
+       // handleIntent(getIntent());
     }
 
-    protected void onNewIntent(Intent intent) {
+  /*  protected void onNewIntent(Intent intent) {
         handleIntent(intent);
     }
 
@@ -33,5 +33,5 @@ public class SearchResultsActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Cursor c = db.getWordMatches(query, null);
         }
-    }
+    }*/
 }

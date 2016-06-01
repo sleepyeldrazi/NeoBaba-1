@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.File;
@@ -139,7 +140,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public Cursor getWordMatches(String query, String[] columns) {
+  /*  public Cursor getWordMatches(String query, String[] columns) {
         String selection = PRODUCTS_NAME + " MATCH ?";
         String[] selectionArgs = new String[] {query+"*"};
 
@@ -161,6 +162,28 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+    public Cursor query(Uri uri, String[] projection, String selection,
+                        String[] selectionArgs, String sortOrder) {
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(PRODUCTS_TABLE);
+
+        Cursor cursor = builder.query(this.getReadableDatabase(),
+                projection, selection, selectionArgs, null, null, null);
+
+        if (selectionArgs != null && selectionArgs.length > 0 && selectionArgs[0].length() > 0) {
+            if (cursor == null) {
+                return null;
+            } else if (!cursor.moveToFirst()) {
+                cursor.close();
+                return null;
+            }
+            return cursor;
+        }
+        else {
+            return null;
+        }
+    }*/
 
     @Override
     public SQLiteDatabase getReadableDatabase() {

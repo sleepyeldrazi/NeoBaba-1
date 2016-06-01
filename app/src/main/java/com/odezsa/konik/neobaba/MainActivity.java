@@ -1,6 +1,7 @@
 package com.odezsa.konik.neobaba;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,7 +26,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity
 
     public static int counter = 0;
     private final int  NUM_COL= 3;
+    public SearchView searchView;
     private final int NUM_ROW=3;
+    String[] args;
     public Menu testMenu;
     public static Food food[] = new Food[6];
 
@@ -75,6 +78,9 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        ImageView but = (ImageView) findViewById(R.id.but);
+        but.getLayoutParams().width = but.getLayoutParams().height;
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -106,27 +112,11 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
+        args = new String[] {""};
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) findViewById(R.id.search);
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-        SQLiteDatabase db = myDbHelper.getWritableDatabase();
-        Cursor productCursor = myDbHelper.getWordMatches(searchManager.QUERY, null);
-        ProductAdapter productAdapter = new ProductAdapter(this, productCursor);
-        searchView.setSuggestionsAdapter(productAdapter);
 
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            // Handle the normal search query case
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Cursor c = myDbHelper.getWordMatches(query, null);
-        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            // Handle a suggestions click (because the suggestions all use ACTION_VIEW)
-            Uri data = intent.getData();
-            //showResult(data);
-        }
+
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
         /*food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
@@ -139,10 +129,6 @@ public class MainActivity extends AppCompatActivity
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
 
-
-
-        ImageView but = (ImageView) findViewById(R.id.but);
-        but.getLayoutParams().width = but.getLayoutParams().height;
 
 
         int imgSize = (int) (displaymetrics.widthPixels * 0.35);
@@ -158,14 +144,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Cursor c = myDbHelper.getWordMatches(query, null);
-            //process Cursor and display results
-        }
-    }
 
         public void startSearch(View view){
             Intent i = new Intent(MainActivity.this, ReceptActivity.class);
@@ -201,8 +179,13 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
 
         MenuItem searchItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(this, MainActivity.class)));
+        searchView.setIconifiedByDefault(false);
 
         return true;
     }
@@ -215,7 +198,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        // User changed the text
+        args = new String[] {searchView.getQuery().toString()};
+        SQLiteDatabase db = myDbHelper.getWritableDatabase();
+        Cursor c = db.query("products", new String[]{"prodName"}
+                , "prodName LIKE ?" ,args, null, null, null);
+        while(c.moveToNext())
+        {
+            // your calculation goes here
+        }
         return false;
     }
 
