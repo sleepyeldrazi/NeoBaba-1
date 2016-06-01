@@ -1,10 +1,16 @@
 package com.odezsa.konik.neobaba;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,14 +20,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static int counter = 0;
+    private final int  NUM_COL= 3;
+    private final int NUM_ROW=3;
     public Menu testMenu;
     public static Food food[] = new Food[6];
+
+    DatabaseHelper myDbHelper;
+
+
 
     public static boolean checkFood(int i){
         if(food[i].isChecked) return true;
@@ -60,16 +79,53 @@ public class MainActivity extends AppCompatActivity
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
+        myDbHelper = new DatabaseHelper(this);
+
+        try {
+
+            myDbHelper.createDataBase();
+
+        } catch (IOException ioe) {
+
+            throw new Error("Unable to create database");
+
+        }
+
+        try {
+
+            myDbHelper.openDataBase();
+
+        }catch(SQLException sqle){
+
+            try {
+                throw sqle;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) findViewById(R.id.search);
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        SQLiteDatabase db = myDbHelper.getWritableDatabase();
+        Cursor productCursor = myDbHelper.getWordMatches(searchManager.QUERY, null);
+        ProductAdapter productAdapter = new ProductAdapter(this, productCursor);
+        searchView.setSuggestionsAdapter(productAdapter);
+
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-        food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
+        /*food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
         food[1] = new Food("Домат", (ImageView)findViewById(R.id.tomato));
         food[2] = new Food("Сирене", (ImageView)findViewById(R.id.sir));
         food[3] = new Food("Кашкавал", (ImageView)findViewById(R.id.kash));
         food[4] = new Food("Яица", (ImageView)findViewById(R.id.qco));
-        food[5] = new Food("Мляко", (ImageView)findViewById(R.id.mill));
+        food[5] = new Food("Мляко", (ImageView)findViewById(R.id.mill));*/
 
 
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
+
 
 
         ImageView but = (ImageView) findViewById(R.id.but);
@@ -78,23 +134,31 @@ public class MainActivity extends AppCompatActivity
 
         int imgSize = (int) (displaymetrics.widthPixels * 0.35);
 
-        for(int i=0; i<food.length; i++ ){
+       /* for(int i=0; i<food.length; i++ ){
             food[i].getImg().getLayoutParams().height = imgSize;
             food[i].getImg().getLayoutParams().width = imgSize;
         }
         imgSize = (int) (displaymetrics.widthPixels * 0.2);
         but.getLayoutParams().width = imgSize;
-        but.getLayoutParams().height =(int) (imgSize * 0.9);
+        but.getLayoutParams().height =(int) (imgSize * 0.9);*/
 
 
     }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Cursor c = myDbHelper.getWordMatches(query, null);
+            //process Cursor and display results
+        }
 
         public void startSearch(View view){
             Intent i = new Intent(MainActivity.this, ReceptActivity.class);
             startActivity(i);
         }
 
-        public void PressMeMilk(View view){
+      /*  public void markProduct(View view){
             if(testMenu.findItem(R.id.mill) == null) {
                 testMenu.add(0, R.id.mill, counter, "Мляко");
                 food[5].setIsChecked(true);
@@ -106,72 +170,7 @@ public class MainActivity extends AppCompatActivity
                 food[5].getImg().setBackgroundColor(0);
             }
 
-        }
-    public void PressMeHleb(View view){
-        if(testMenu.findItem(R.id.helb) == null){
-            food[0].setIsChecked(true);
-            food[0].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
-            testMenu.add(0, R.id.helb, counter, "Хляб");}
-        else {
-            testMenu.removeItem(R.id.helb);
-            food[0].getImg().setBackgroundColor(0);
-            food[0].setIsChecked(true);
-        }
-    }
-    public void PressMeTomato(View view){
-
-        if(testMenu.findItem(R.id.tomato) == null) {
-            food[1].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
-            testMenu.add(0, R.id.tomato, counter, "Домати");
-            food[1].setIsChecked(true);
-        }
-        else {
-            testMenu.removeItem(R.id.tomato);
-            food[1].getImg().setBackgroundColor(0);
-            food[1].setIsChecked(true);
-        }
-    }
-
-    //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-    public void PressMeQco(View view){
-
-        if(testMenu.findItem(R.id.qco) == null) {
-            food[4].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
-            testMenu.add(0, R.id.qco, counter, "Яица");
-            food[4].setIsChecked(true);
-        }
-        else {
-            food[4].getImg().setBackgroundColor(0);
-            food[4].setIsChecked(true);
-            testMenu.removeItem(R.id.qco);
-        }
-    }
-    public void PressMeSir(View view){
-        if(testMenu.findItem(R.id.sir) == null) {
-            food[2].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
-            food[2].setIsChecked(true);
-
-            testMenu.add(0, R.id.sir, counter, "Сирене");
-        }
-        else {
-            food[2].setIsChecked(true);
-            testMenu.removeItem(R.id.sir);
-            food[2].getImg().setBackgroundColor(0);
-        }
-    }
-    public void PressMeKash(View view){
-        if(testMenu.findItem(R.id.kash) == null) {
-            food[3].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
-            testMenu.add(0, R.id.kash, counter, "Кашкавал");
-            food[3].setIsChecked(true);
-        }
-        else {
-            food[3].setIsChecked(true);
-            testMenu.removeItem(R.id.kash);
-            food[3].getImg().setBackgroundColor(0);
-        }
-    }
-
+        }*/
 
 
     @Override
@@ -187,7 +186,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+       /* MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        */
 
 
         return true;
@@ -218,5 +219,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private class SuggestionsAdapter extends CursorAdapter {
+
+        public SuggestionsAdapter(Context context, Cursor c) {
+            super(context, c, 0);
+        }
+
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View v = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            return v;
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            TextView tv = (TextView) view;
+            final int textIndex = cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1);
+            tv.setText(cursor.getString(textIndex));
+        }
     }
 }

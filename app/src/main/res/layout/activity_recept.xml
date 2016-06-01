@@ -7,16 +7,15 @@
     tools:context="com.odezsa.konik.neobaba.ReceptActivity"
     android:id="@+id/rl">
 
-   <!-- <ListView
+    <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recepti"
+        android:id="@+id/list"
         android:dividerHeight="10dp"
         android:background="@color/colorPrimary"
-        android:entries="@array/recepti"
         android:divider="#f9f9f9"
-        android:drawSelectorOnTop="false" /> 
-
+        android:drawSelectorOnTop="false" />
+   <!--
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
