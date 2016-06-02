@@ -118,17 +118,6 @@ public class MainActivity extends AppCompatActivity
         icons[7]= 360;//teleshko
 
         SQLiteDatabase db = myDbHelper.getWritableDatabase();
-        ImageView imgView = new ImageView(this);
-
-        Cursor cur = db.rawQuery("select imgUrl from products where _id = 212;", null);
-        if(cur!= null) {
-
-            byte[] image = cur.getBlob(1);
-            Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
-            imgView.setImageBitmap(bm);
-
-        }
-        imgView.setLayoutParams(but.getLayoutParams());
 
         int imgSize = (int) (displaymetrics.widthPixels * 0.35);
 
