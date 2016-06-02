@@ -45,20 +45,6 @@ public class ReceptaActivity extends AppCompatActivity {
 
 
 
-        if(ReceptActivity.getReceptId() == 1){
-            img.setImageResource(R.drawable.omlet);
-            name.setText(R.string.omletName);
-            deck.setText(R.string.omlet);
-            deck2.setText(R.string.omlet2);
-        }
-
-        else{
-            img.setImageResource(R.drawable.popara);
-            name.setText(R.string.poparaName);
-            deck.setText(R.string.popara);
-            deck2.setText(R.string.popara2);
-        }
-
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

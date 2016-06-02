@@ -30,9 +30,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PRODUCTS_TABLE = "products";
     public static final String PRODUCTS_NAME = "prodName";
 
-
-    public DatabaseHelper(Context context)
-    {
+    public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, 1);// 1? Its database Version
         if(android.os.Build.VERSION.SDK_INT >= 17){
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
@@ -42,6 +40,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
             DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
         }
         this.myContext = context;
+
     }
 
 
@@ -72,7 +71,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Check that the database exists here: /data/data/your package/databases/Da Name
-    private boolean checkDataBase(){
+    public boolean checkDataBase(){
 
         SQLiteDatabase checkDB = null;
 
@@ -197,7 +196,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        myDataBase = db;
     }
 
     @Override

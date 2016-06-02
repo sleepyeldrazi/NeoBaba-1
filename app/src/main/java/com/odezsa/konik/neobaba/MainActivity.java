@@ -28,6 +28,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.support.v7.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     private final int  NUM_COL= 3;
     public SearchView searchView;
     private final int NUM_ROW=3;
-    String[] args;
+    int[] chosen = new int[50];
     public Menu testMenu;
     public static Food food[] = new Food[6];
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         NavigationView nvView = (NavigationView) findViewById(R.id.nav_view);
         testMenu = nvView.getMenu();
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -87,46 +89,23 @@ public class MainActivity extends AppCompatActivity
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
+
         myDbHelper = new DatabaseHelper(this);
 
         try {
-
             myDbHelper.createDataBase();
-
         } catch (IOException ioe) {
-
             throw new Error("Unable to create database");
-
         }
-
         try {
-
             myDbHelper.openDataBase();
-
         }catch(SQLException sqle){
-
             try {
                 throw sqle;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         }
-        args = new String[] {""};
-
-
-
-
-
-        //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
-        /*food[0] = new Food("Хляб", (ImageView) findViewById(R.id.helb));
-        food[1] = new Food("Домат", (ImageView)findViewById(R.id.tomato));
-        food[2] = new Food("Сирене", (ImageView)findViewById(R.id.sir));
-        food[3] = new Food("Кашкавал", (ImageView)findViewById(R.id.kash));
-        food[4] = new Food("Яица", (ImageView)findViewById(R.id.qco));
-        food[5] = new Food("Мляко", (ImageView)findViewById(R.id.mill));*/
-
-
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
 
 
@@ -147,6 +126,8 @@ public class MainActivity extends AppCompatActivity
 
         public void startSearch(View view){
             Intent i = new Intent(MainActivity.this, ReceptActivity.class);
+            i.putExtra("chosen", chosen);
+            myDbHelper.close();
             startActivity(i);
         }
 
@@ -190,18 +171,35 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //TODO:lowercase input
+
+
+
     @Override
     public boolean onQueryTextSubmit(String query) {
-        // User pressed the search button
+        SQLiteDatabase db = myDbHelper.getWritableDatabase();
+        int location = counter;
+
+        Cursor cursor =  db.rawQuery("select * from products where prodName like '" + searchView.getQuery() + "%';" , null);
+        if (cursor != null)
+        {
+            if (cursor.moveToFirst())
+            {
+                int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                location = id;
+            }
+            cursor.close();
+        }
+        testMenu.add(0, location, counter, searchView.getQuery());
+        chosen[counter] = location;
+        Toast.makeText(getApplicationContext(),searchView.getQuery() + " беше добавено", Toast.LENGTH_LONG).show();
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        args = new String[] {searchView.getQuery().toString()};
         SQLiteDatabase db = myDbHelper.getWritableDatabase();
-        Cursor c = db.query("products", new String[]{"prodName"}
-                , "prodName LIKE ?" ,args, null, null, null);
+        Cursor c = db.rawQuery("select * from products where prodName like '" + searchView.getQuery() + "%';" , null);
         while(c.moveToNext())
         {
             // your calculation goes here
