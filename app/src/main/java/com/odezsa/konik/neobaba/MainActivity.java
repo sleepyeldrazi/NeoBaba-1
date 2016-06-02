@@ -42,17 +42,9 @@ public class MainActivity extends AppCompatActivity
     private final int NUM_ROW=3;
     int[] chosen = new int[50];
     public Menu testMenu;
-    public static Food food[] = new Food[6];
 
     DatabaseHelper myDbHelper;
 
-
-
-    public static boolean checkFood(int i){
-        if(food[i].isChecked) return true;
-        else return false;
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         public void startSearch(View view){
             Intent i = new Intent(MainActivity.this, ReceptActivity.class);
             i.putExtra("chosen", chosen);
+            i.putExtra("count", counter);
             myDbHelper.close();
             startActivity(i);
         }
@@ -192,6 +185,7 @@ public class MainActivity extends AppCompatActivity
         }
         testMenu.add(0, location, counter, searchView.getQuery());
         chosen[counter] = location;
+        counter++;
         Toast.makeText(getApplicationContext(),searchView.getQuery() + " беше добавено", Toast.LENGTH_LONG).show();
         return false;
     }

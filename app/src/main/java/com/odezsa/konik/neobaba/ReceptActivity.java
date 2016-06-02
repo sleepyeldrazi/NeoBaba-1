@@ -19,16 +19,15 @@ public class ReceptActivity extends AppCompatActivity {
 
     ListView listView;
     DatabaseHelper myDbHelper;
-    private String[] recNames = new String[20];
+    String[] recNames;
+
     private int count;
+
+
 
 
     //Cursor cursor =  db.rawQuery("select * from products where prodName like '" + searchView.getQuery() + "%';" , null);
 
-    Integer[] imageId = {
-            R.drawable.popara,
-            R.drawable.omlet
-    };
 
     private boolean isIn(int value, int[] array){
         for(int i=0; i<array.length; i++){
@@ -45,27 +44,38 @@ public class ReceptActivity extends AppCompatActivity {
         count = 0;
         Bundle extras = getIntent().getExtras();
         myDbHelper = new DatabaseHelper(getApplicationContext());
-
         int chosen[] = extras.getIntArray("chosen");
+        int count = extras.getInt("count");
+
+
+        recNames = new String[2];
+        Integer[] imageId = new Integer[2];
+        imageId[0] = R.drawable.popara;
+        imageId[1] = R.drawable.omlet;
+
+
 
         SQLiteDatabase db = myDbHelper.getWritableDatabase();
         int recId = 0;
         Cursor cursor =  db.rawQuery("select _id from combo where productId = " + chosen[0] , null);
         cursor.moveToFirst();
 
-        for(int i=0; i<chosen.length;i++){
+        for(int i=0; i<=count;i++){
             boolean test = true;
-            while(!cursor.isAfterLast()){
+            while(cursor.moveToNext()){
                 recId = cursor.getInt(cursor.getColumnIndex("_id"));
             }
             cursor = db.rawQuery("select productId from combo where _id = " + recId , null);
             cursor.moveToFirst();
-            while(!cursor.isAfterLast()){
+            while(cursor.moveToNext()){
                 if(!isIn(cursor.getInt(cursor.getColumnIndex("productId")), chosen)) test = false;
             }
             cursor =  db.rawQuery("select recName from recipes where _id = " + recId, null);
 
-            if(test && !cursor.isAfterLast()) recNames[count] = cursor.getString(cursor.getColumnIndex("recName"));
+            if(test && !cursor.isAfterLast()) {
+                recNames[count] = cursor.getString(cursor.getColumnIndex("recName"));
+                count++;
+            }
 
         }
 
