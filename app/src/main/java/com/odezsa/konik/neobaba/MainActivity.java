@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -25,8 +28,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.support.v7.widget.SearchView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +47,9 @@ public class MainActivity extends AppCompatActivity
     private final int NUM_ROW=3;
     int[] chosen = new int[50];
     public Menu testMenu;
+    public ImageView[] food = new ImageView[8];
+    public int[] icons = new int[8];
+
 
     DatabaseHelper myDbHelper;
 
@@ -100,14 +108,48 @@ public class MainActivity extends AppCompatActivity
         }
         //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
 
+        icons[0]= 124; // kashkaval
+        icons[1]= 78; // domat
+        icons[2]= 307;//sirene
+        icons[3]= 421;//qica
+        icons[4]= 212;//milk
+        icons[5]= 154;//cucum
+        icons[6]= 380;//hlqb
+        icons[7]= 360;//teleshko
 
+        SQLiteDatabase db = myDbHelper.getWritableDatabase();
+        ImageView imgView = new ImageView(this);
+
+        Cursor cur = db.rawQuery("select imgUrl from products where _id = 212;", null);
+        if(cur!= null) {
+
+            byte[] image = cur.getBlob(1);
+            Bitmap bm = BitmapFactory.decodeByteArray(image, 0, image.length);
+            imgView.setImageBitmap(bm);
+
+        }
+        imgView.setLayoutParams(but.getLayoutParams());
 
         int imgSize = (int) (displaymetrics.widthPixels * 0.35);
 
-       /* for(int i=0; i<food.length; i++ ){
+       /*for(int i=0; i<food.length; i++ ){
+
+
+               food[i] = new ImageButton(this);
+
+               food[i].setLayoutParams(lp);
+               food[i].setOnClickListener(ClickListener);
+               food[i].setBackgroundColor(Color.TRANSPARENT);
+               food[i].setTag(i);
+               food[i].setId(icons[i]);
+
+               gameBoard.addView(food[i]);
+
             food[i].getImg().getLayoutParams().height = imgSize;
             food[i].getImg().getLayoutParams().width = imgSize;
         }
+        food[i].setImageResource(R.drawable.bola_verde);
+        /*
         imgSize = (int) (displaymetrics.widthPixels * 0.2);
         but.getLayoutParams().width = imgSize;
         but.getLayoutParams().height =(int) (imgSize * 0.9);*/
