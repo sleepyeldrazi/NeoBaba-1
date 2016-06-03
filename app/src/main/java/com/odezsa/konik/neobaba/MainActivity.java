@@ -31,6 +31,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.support.v7.widget.SearchView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -141,7 +142,6 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase db = myDbHelper.getWritableDatabase();
 
         int imgSize = (int) (displaymetrics.widthPixels * 0.35);
-        RelativeLayout.LayoutParams[] lparams = new RelativeLayout.LayoutParams[8];
 
 /*
         for(int i=0; i<food.length; i++){
@@ -245,34 +245,94 @@ public class MainActivity extends AppCompatActivity
         food[1].setBackgroundColor(Color.TRANSPARENT);
         food[1].setId(R.id.layout6);
 
-
+*/
         for(int i=0; i<8; i++ ) {
-            rl.addView(food[i]);
-        }*/
-
-       /*for(int i=0; i<food.length; i++ ){
-
-
-               food[i] = new ImageButton(this);
-
-               food[i].setLayoutParams(lp);
-               food[i].setOnClickListener(ClickListener);
-               food[i].setBackgroundColor(Color.TRANSPARENT);
-               food[i].setTag(i);
-               food[i].setId(icons[i]);
-
-               gameBoard.addView(food[i]);
-
-            food[i].getImg().getLayoutParams().height = imgSize;
-            food[i].getImg().getLayoutParams().width = imgSize;
+            food[i] = new ImageButton(this);
         }
-        food[i].setImageResource(R.drawable.bola_verde);
-        /*
+
+
+        food[0] = (ImageButton) findViewById(R.id.helb);
+        food[1] = (ImageButton)findViewById(R.id.tomato);
+        food[2] = (ImageButton)findViewById(R.id.sir);
+        food[3] = (ImageButton)findViewById(R.id.kash);
+        food[4] = (ImageButton)findViewById(R.id.qco);
+        food[5] = (ImageButton)findViewById(R.id.mill);
+       for(int i=0; i<6; i++ ) {
+           food[i].getLayoutParams().height = imgSize;
+           food[i].getLayoutParams().width = imgSize;
+       }
+
         imgSize = (int) (displaymetrics.widthPixels * 0.2);
         but.getLayoutParams().width = imgSize;
-        but.getLayoutParams().height =(int) (imgSize * 0.9);*/
+        but.getLayoutParams().height =(int) (imgSize * 0.9);
 
 
+    }
+    public void PressMeMilk(View view){
+        if(testMenu.findItem(R.id.mill) == null) {
+            testMenu.add(0, getStuff("Мляко"), counter, "Мляко");
+            Toast.makeText(getApplicationContext(), "Добавихте Мляко", Toast.LENGTH_LONG).show();
+        }
+        else{
+            testMenu.removeItem(R.id.mill);
+        }
+
+    }
+    public void PressMeHleb(View view){
+        if(testMenu.findItem(R.id.helb) == null) {
+            testMenu.add(0, getStuff("Хляб"), counter, "Хляб");
+            Toast.makeText(getApplicationContext(), "Добавихте Хляб", Toast.LENGTH_LONG).show();
+        }
+        else {
+            testMenu.removeItem(R.id.helb);
+
+        }
+    }
+    public void PressMeTomato(View view){
+
+        if(testMenu.findItem(R.id.tomato) == null) {
+            testMenu.add(0, getStuff("Домат"), counter, "Домат");
+            Toast.makeText(getApplicationContext(), "Добавихте Домат", Toast.LENGTH_LONG).show();
+        }
+        else {
+            testMenu.removeItem(R.id.tomato);
+
+        }
+    }
+
+    //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
+    public void PressMeQco(View view){
+
+        if(testMenu.findItem(R.id.qco) == null) {
+            testMenu.add(0, getStuff("Яйце"), counter, "Яйце");
+            Toast.makeText(getApplicationContext(), "Добавихте Яйца", Toast.LENGTH_LONG).show();
+        }
+        else {
+            testMenu.removeItem(R.id.qco);
+        }
+    }
+    public void PressMeSir(View view){
+        if(testMenu.findItem(R.id.sir) == null) {
+            testMenu.add(0, getStuff("Сирене"), counter, "Сирене");
+            Toast.makeText(getApplicationContext(), "Добавихте Сирене", Toast.LENGTH_LONG).show();
+        }
+        else {
+
+            testMenu.removeItem(R.id.sir);
+
+        }
+    }
+    public void PressMeKash(View view){
+        if(testMenu.findItem(R.id.kash) == null) {
+            testMenu.add(0, getStuff("Кашкавал"), counter, "Кашкавал");
+            Toast.makeText(getApplicationContext(), "Добавихте Кашкавал" +
+                    "", Toast.LENGTH_LONG).show();
+        }
+        else {
+
+            testMenu.removeItem(R.id.kash);
+
+        }
     }
 
 
