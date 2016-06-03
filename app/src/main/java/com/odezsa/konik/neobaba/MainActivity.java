@@ -46,13 +46,30 @@ public class MainActivity extends AppCompatActivity
     public SearchView searchView;
     private final int NUM_ROW=3;
     int[] chosen = new int[50];
+    int location;
     public Menu testMenu;
-    public ImageView[] food = new ImageView[8];
+    public ImageButton[] food = new ImageButton[8];
     public int[] icons = new int[8];
 
 
     DatabaseHelper myDbHelper;
 
+    public int getStuff(String name){
+        myDbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = myDbHelper.getWritableDatabase();
+        int loc=0;
+        Cursor cursor =  db.rawQuery("select * from products where prodName like '" + name.toLowerCase() + "%';" , null);
+        if (cursor != null)
+        {
+            if (cursor.moveToFirst())
+            {
+                int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                loc = id;
+            }
+            cursor.close();
+        }
+        return loc;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         NavigationView nvView = (NavigationView) findViewById(R.id.nav_view);
         testMenu = nvView.getMenu();
+        location = counter;
 
 
 
@@ -79,9 +97,12 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        counter = 0;
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl);
 
         ImageView but = (ImageView) findViewById(R.id.but);
         but.getLayoutParams().width = but.getLayoutParams().height;
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -120,6 +141,114 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase db = myDbHelper.getWritableDatabase();
 
         int imgSize = (int) (displaymetrics.widthPixels * 0.35);
+        RelativeLayout.LayoutParams[] lparams = new RelativeLayout.LayoutParams[8];
+
+/*
+        for(int i=0; i<food.length; i++){
+            food[i] = new ImageButton(this);
+            lparams[i] = new RelativeLayout.LayoutParams(imgSize,
+                    imgSize);
+        }
+
+        food[0].setImageResource(R.drawable.button_cheese);
+        food[0].setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testMenu.add(0, getStuff("Кашкавал"), counter, "Кашкавал");
+                Toast.makeText(getApplicationContext(), "Добавихте Кашкавал", Toast.LENGTH_LONG).show();
+            }
+        });
+        chosen[counter] = getStuff("Кашкавал");
+        lparams[0].addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        food[0].setLayoutParams(lparams[0]);
+        counter++;
+        food[0].setBackgroundColor(Color.TRANSPARENT);
+        food[0].setId(R.id.layout1);
+
+
+        food[2].setImageResource(R.drawable.button_cheese);
+        food[2].setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testMenu.add(0, getStuff("Сирене"), counter, "Сирене");
+                Toast.makeText(getApplicationContext(), "Добавихте Сирене", Toast.LENGTH_LONG).show();
+            }
+        });
+        chosen[counter] = getStuff("Сирене");
+        lparams[2].addRule(RelativeLayout.LEFT_OF, R.id.layout1);
+        food[2].setLayoutParams(lparams[2]);
+        counter++;
+        food[2].setBackgroundColor(Color.TRANSPARENT);
+        food[2].setId(R.id.layout2);
+
+
+        food[3].setImageResource(R.drawable.button_cheese);
+        food[3].setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testMenu.add(0, getStuff("Яйца"), counter, "Яйца");
+                Toast.makeText(getApplicationContext(), "Добавихте Яйца", Toast.LENGTH_LONG).show();
+            }
+        });
+        chosen[counter] = getStuff("Яйца");
+        lparams[3].addRule(RelativeLayout.BELOW, R.id.layout1);
+        food[3].setLayoutParams(lparams[0]);
+        counter++;
+        food[3].setBackgroundColor(Color.TRANSPARENT);
+        food[3].setId(R.id.layout3);
+
+
+        food[4].setImageResource(R.drawable.button_cheese);
+        food[4].setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testMenu.add(0, getStuff("Мляко"), counter, "Мляко");
+                Toast.makeText(getApplicationContext(), "Добавихте Мляко", Toast.LENGTH_LONG).show();
+            }
+        });
+        chosen[counter] = getStuff("Мляко");
+        lparams[4].addRule(RelativeLayout.LEFT_OF, R.id.layout3);
+        food[4].setLayoutParams(lparams[0]);
+        counter++;
+        food[4].setBackgroundColor(Color.TRANSPARENT);
+        food[4].setId(R.id.layout3);
+
+
+        food[6].setImageResource(R.drawable.button_cheese);
+        food[6].setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testMenu.add(0, getStuff("Хляб"), counter, "Хляб");
+                Toast.makeText(getApplicationContext(), "Добавихте Хляб", Toast.LENGTH_LONG).show();
+            }
+        });
+        chosen[counter] = getStuff("Хляб");
+        lparams[6].addRule(RelativeLayout.BELOW, R.id.layout3);
+        food[6].setLayoutParams(lparams[6]);
+        counter++;
+        food[6].setBackgroundColor(Color.TRANSPARENT);
+        food[6].setId(R.id.layout5);
+
+
+        food[1].setImageResource(R.drawable.button_cheese);
+        food[1].setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testMenu.add(0, getStuff("Домат"), counter, "Домат");
+                Toast.makeText(getApplicationContext(), "Добавихте Домат", Toast.LENGTH_LONG).show();
+            }
+        });
+        chosen[counter] = getStuff("Домат");
+        lparams[1].addRule(RelativeLayout.LEFT_OF, R.id.layout5);
+        food[1].setLayoutParams(lparams[1]);
+        counter++;
+        food[1].setBackgroundColor(Color.TRANSPARENT);
+        food[1].setId(R.id.layout6);
+
+
+        for(int i=0; i<8; i++ ) {
+            rl.addView(food[i]);
+        }*/
 
        /*for(int i=0; i<food.length; i++ ){
 
@@ -202,7 +331,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onQueryTextSubmit(String query) {
         SQLiteDatabase db = myDbHelper.getWritableDatabase();
-        int location = counter;
+
 
         Cursor cursor =  db.rawQuery("select * from products where prodName like '" + searchView.getQuery() + "%';" , null);
         if (cursor != null)
@@ -217,7 +346,7 @@ public class MainActivity extends AppCompatActivity
         testMenu.add(0, location, counter, searchView.getQuery());
         chosen[counter] = location;
         counter++;
-        Toast.makeText(getApplicationContext(),searchView.getQuery() + " беше добавено", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Добавихте " + searchView.getQuery(), Toast.LENGTH_LONG).show();
         return false;
     }
 
