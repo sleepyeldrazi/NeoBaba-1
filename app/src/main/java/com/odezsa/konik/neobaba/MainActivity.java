@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private final int NUM_ROW=3;
     int[] chosen = new int[50];
     int location;
+    int holder;
     public Menu testMenu;
     public ImageButton[] food = new ImageButton[8];
     public int[] icons = new int[8];
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView nvView = (NavigationView) findViewById(R.id.nav_view);
         testMenu = nvView.getMenu();
         location = counter;
-
+        counter = 0;
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -98,11 +99,12 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        counter = 0;
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl);
+
+
 
         ImageView but = (ImageView) findViewById(R.id.but);
         but.getLayoutParams().width = but.getLayoutParams().height;
+
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -143,109 +145,7 @@ public class MainActivity extends AppCompatActivity
 
         int imgSize = (int) (displaymetrics.widthPixels * 0.35);
 
-/*
-        for(int i=0; i<food.length; i++){
-            food[i] = new ImageButton(this);
-            lparams[i] = new RelativeLayout.LayoutParams(imgSize,
-                    imgSize);
-        }
 
-        food[0].setImageResource(R.drawable.button_cheese);
-        food[0].setOnClickListener(new ImageButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testMenu.add(0, getStuff("Кашкавал"), counter, "Кашкавал");
-                Toast.makeText(getApplicationContext(), "Добавихте Кашкавал", Toast.LENGTH_LONG).show();
-            }
-        });
-        chosen[counter] = getStuff("Кашкавал");
-        lparams[0].addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        food[0].setLayoutParams(lparams[0]);
-        counter++;
-        food[0].setBackgroundColor(Color.TRANSPARENT);
-        food[0].setId(R.id.layout1);
-
-
-        food[2].setImageResource(R.drawable.button_cheese);
-        food[2].setOnClickListener(new ImageButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testMenu.add(0, getStuff("Сирене"), counter, "Сирене");
-                Toast.makeText(getApplicationContext(), "Добавихте Сирене", Toast.LENGTH_LONG).show();
-            }
-        });
-        chosen[counter] = getStuff("Сирене");
-        lparams[2].addRule(RelativeLayout.LEFT_OF, R.id.layout1);
-        food[2].setLayoutParams(lparams[2]);
-        counter++;
-        food[2].setBackgroundColor(Color.TRANSPARENT);
-        food[2].setId(R.id.layout2);
-
-
-        food[3].setImageResource(R.drawable.button_cheese);
-        food[3].setOnClickListener(new ImageButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testMenu.add(0, getStuff("Яйца"), counter, "Яйца");
-                Toast.makeText(getApplicationContext(), "Добавихте Яйца", Toast.LENGTH_LONG).show();
-            }
-        });
-        chosen[counter] = getStuff("Яйца");
-        lparams[3].addRule(RelativeLayout.BELOW, R.id.layout1);
-        food[3].setLayoutParams(lparams[0]);
-        counter++;
-        food[3].setBackgroundColor(Color.TRANSPARENT);
-        food[3].setId(R.id.layout3);
-
-
-        food[4].setImageResource(R.drawable.button_cheese);
-        food[4].setOnClickListener(new ImageButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testMenu.add(0, getStuff("Мляко"), counter, "Мляко");
-                Toast.makeText(getApplicationContext(), "Добавихте Мляко", Toast.LENGTH_LONG).show();
-            }
-        });
-        chosen[counter] = getStuff("Мляко");
-        lparams[4].addRule(RelativeLayout.LEFT_OF, R.id.layout3);
-        food[4].setLayoutParams(lparams[0]);
-        counter++;
-        food[4].setBackgroundColor(Color.TRANSPARENT);
-        food[4].setId(R.id.layout3);
-
-
-        food[6].setImageResource(R.drawable.button_cheese);
-        food[6].setOnClickListener(new ImageButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testMenu.add(0, getStuff("Хляб"), counter, "Хляб");
-                Toast.makeText(getApplicationContext(), "Добавихте Хляб", Toast.LENGTH_LONG).show();
-            }
-        });
-        chosen[counter] = getStuff("Хляб");
-        lparams[6].addRule(RelativeLayout.BELOW, R.id.layout3);
-        food[6].setLayoutParams(lparams[6]);
-        counter++;
-        food[6].setBackgroundColor(Color.TRANSPARENT);
-        food[6].setId(R.id.layout5);
-
-
-        food[1].setImageResource(R.drawable.button_cheese);
-        food[1].setOnClickListener(new ImageButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testMenu.add(0, getStuff("Домат"), counter, "Домат");
-                Toast.makeText(getApplicationContext(), "Добавихте Домат", Toast.LENGTH_LONG).show();
-            }
-        });
-        chosen[counter] = getStuff("Домат");
-        lparams[1].addRule(RelativeLayout.LEFT_OF, R.id.layout5);
-        food[1].setLayoutParams(lparams[1]);
-        counter++;
-        food[1].setBackgroundColor(Color.TRANSPARENT);
-        food[1].setId(R.id.layout6);
-
-*/
         for(int i=0; i<8; i++ ) {
             food[i] = new ImageButton(this);
         }
@@ -262,75 +162,91 @@ public class MainActivity extends AppCompatActivity
            food[i].getLayoutParams().width = imgSize;
        }
 
-        imgSize = (int) (displaymetrics.widthPixels * 0.2);
+        imgSize = (int) (displaymetrics.widthPixels * 0.3);
         but.getLayoutParams().width = imgSize;
         but.getLayoutParams().height =(int) (imgSize * 0.9);
 
-
     }
+
+    //OnClick methods for the icons
     public void PressMeMilk(View view){
-        if(testMenu.findItem(R.id.mill) == null) {
-            testMenu.add(0, getStuff("Мляко"), counter, "Мляко");
+        holder = getStuff("Мляко");
+        if(testMenu.findItem(holder) == null) {
+            testMenu.add(0, holder, counter, "Мляко");
+            chosen[counter] = holder;
+            counter++;
             Toast.makeText(getApplicationContext(), "Добавихте Мляко", Toast.LENGTH_LONG).show();
         }
         else{
-            testMenu.removeItem(R.id.mill);
+            testMenu.removeItem(holder);
         }
 
     }
     public void PressMeHleb(View view){
-        if(testMenu.findItem(R.id.helb) == null) {
-            testMenu.add(0, getStuff("Хляб"), counter, "Хляб");
+        holder = getStuff("Хляб");
+        if(testMenu.findItem(holder) == null) {
+            testMenu.add(0, holder, counter, "Хляб");
+            chosen[counter] = holder;
+            counter++;
             Toast.makeText(getApplicationContext(), "Добавихте Хляб", Toast.LENGTH_LONG).show();
         }
         else {
-            testMenu.removeItem(R.id.helb);
+            testMenu.removeItem(holder);
 
         }
     }
     public void PressMeTomato(View view){
-
-        if(testMenu.findItem(R.id.tomato) == null) {
-            testMenu.add(0, getStuff("Домат"), counter, "Домат");
+        holder = getStuff("Домат");
+        if(testMenu.findItem(holder) == null) {
+            testMenu.add(0, holder, counter, "Домат");
+            counter++;
+            chosen[counter] = holder;
             Toast.makeText(getApplicationContext(), "Добавихте Домат", Toast.LENGTH_LONG).show();
         }
         else {
-            testMenu.removeItem(R.id.tomato);
+            testMenu.removeItem(holder);
 
         }
     }
 
-    //0-hlqb 1-domat 2-sirene 3-kashkaval 4-qica 5-mlqko
     public void PressMeQco(View view){
-
-        if(testMenu.findItem(R.id.qco) == null) {
-            testMenu.add(0, getStuff("Яйце"), counter, "Яйце");
+        holder = getStuff("Яйце");
+        if(testMenu.findItem(holder) == null) {
+            testMenu.add(0, holder, counter, "Яйце");
+            chosen[counter] = holder;
+            counter++;
             Toast.makeText(getApplicationContext(), "Добавихте Яйца", Toast.LENGTH_LONG).show();
         }
         else {
-            testMenu.removeItem(R.id.qco);
+            testMenu.removeItem(holder);
         }
     }
     public void PressMeSir(View view){
-        if(testMenu.findItem(R.id.sir) == null) {
-            testMenu.add(0, getStuff("Сирене"), counter, "Сирене");
+        holder = getStuff("Сирене");
+        if(testMenu.findItem(holder) == null) {
+            testMenu.add(0, holder, counter, "Сирене");
+            chosen[counter] = holder;
+            counter++;
             Toast.makeText(getApplicationContext(), "Добавихте Сирене", Toast.LENGTH_LONG).show();
         }
         else {
 
-            testMenu.removeItem(R.id.sir);
+            testMenu.removeItem(holder);
 
         }
     }
     public void PressMeKash(View view){
-        if(testMenu.findItem(R.id.kash) == null) {
-            testMenu.add(0, getStuff("Кашкавал"), counter, "Кашкавал");
+        holder = getStuff("Кашкавал");
+        if(testMenu.findItem(holder) == null) {
+            testMenu.add(0, holder, counter, "Кашкавал");
+            chosen[counter] = holder;
+            counter++;
             Toast.makeText(getApplicationContext(), "Добавихте Кашкавал" +
                     "", Toast.LENGTH_LONG).show();
         }
         else {
 
-            testMenu.removeItem(R.id.kash);
+            testMenu.removeItem(holder);
 
         }
     }
@@ -344,19 +260,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
         }
 
-      /*  public void markProduct(View view){
-            if(testMenu.findItem(R.id.mill) == null) {
-                testMenu.add(0, R.id.mill, counter, "Мляко");
-                food[5].setIsChecked(true);
-                food[5].getImg().setBackgroundColor(getResources().getColor(R.color.checked));
-            }
-            else{
-                food[5].setIsChecked(true);
-                testMenu.removeItem(R.id.mill);
-                food[5].getImg().setBackgroundColor(0);
-            }
-
-        }*/
 
 
     @Override
@@ -403,10 +306,15 @@ public class MainActivity extends AppCompatActivity
             }
             cursor.close();
         }
-        testMenu.add(0, location, counter, searchView.getQuery());
-        chosen[counter] = location;
-        counter++;
-        Toast.makeText(getApplicationContext(),"Добавихте " + searchView.getQuery(), Toast.LENGTH_LONG).show();
+        if(testMenu.findItem(location) == null) {
+            testMenu.add(0, location, counter, searchView.getQuery());
+            chosen[counter] = location;
+            counter++;
+            Toast.makeText(getApplicationContext(),"Добавихте " + searchView.getQuery(), Toast.LENGTH_LONG).show();
+        } else {
+            testMenu.removeItem(location);
+        }
+
         return false;
     }
 

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -31,6 +33,7 @@ public class CustomListview extends ArrayAdapter<String> {
         txtTitle.setText(receptName[position]);
 
         imageView.setImageResource(imageId[position]);
+
         return rowView;
     }
 
