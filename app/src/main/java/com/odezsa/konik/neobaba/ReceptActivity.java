@@ -1,8 +1,5 @@
 package com.odezsa.konik.neobaba;
 
-import android.app.LoaderManager;
-import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,14 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
-public class ReceptActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
 
     ListView listView;
     DatabaseHelper myDbHelper;
@@ -37,11 +31,7 @@ public class ReceptActivity extends AppCompatActivity implements
     //Cursor cursor =  db.rawQuery("select * from products where prodName like '" + searchView.getQuery() + "%';" , null);
 
 
-    private boolean isIn(int value, int[] array){
-        for(int i=0; i<array.length; i++){
-            if(value == array[i]) return true;
         }
-        return false;
     }
 
 
@@ -55,7 +45,6 @@ public class ReceptActivity extends AppCompatActivity implements
 
         myDbHelper = new DatabaseHelper(getApplicationContext());
 
-        getLoaderManager().initLoader(0, null, this);
 
 
 
@@ -87,56 +76,22 @@ public class ReceptActivity extends AppCompatActivity implements
             return super.onOptionsItemSelected(item);
         }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        SQLiteDatabase db = myDbHelper.getWritableDatabase();
-        int recId = 0;
-        Cursor cursor =  db.rawQuery("select _id from combo where productId = " + chosen[0] , null);
-        cursor.moveToFirst();
+        DatabaseHelper dbConnector = new DatabaseHelper(
+                getApplicationContext());
+            }
 
-        for(int i=0; i<count;i++){
-            boolean test = true;
-            while(cursor.moveToNext()){
-                recId = cursor.getInt(cursor.getColumnIndex("_id"));
             }
-            cursor = db.rawQuery("select productId from combo where _id = " + recId , null);
-            cursor.moveToFirst();
-            while(cursor.moveToNext()){
-                if(!isIn(cursor.getInt(cursor.getColumnIndex("productId")), chosen)) test = false;
-            }
-            cursor =  db.rawQuery("select recName from recipes where _id = " + recId, null);
 
             if(test && !cursor.isAfterLast()) {
-                recNames[count] = cursor.getString(cursor.getColumnIndex("recName"));
-                count++;
             }
 
         }
 
-        cursor.close();
-        return null;
-    }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        CustomListview adapter = new
-                CustomListview(ReceptActivity.this, recNames, imageId);
-        listView=(ListView)findViewById(R.id.list);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(ReceptActivity.this, "You Clicked at " + recNames[-position], Toast.LENGTH_SHORT).show();
 
             }
-        });
 
     }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
 
-    }
 }
