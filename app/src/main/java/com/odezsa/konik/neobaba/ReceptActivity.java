@@ -108,12 +108,13 @@ public class ReceptActivity extends AppCompatActivity{
             int recId = 0;
             int numOfFound = 0;
             int j=0;
+            boolean[] test = new boolean[chosen.length];
 
 
                 for (int i = 0; i < chosen.length; i++) {
                         Cursor cursor = db.rawQuery("select _id from combo where productId = " + chosen[i], null);
                         cursor.moveToFirst();
-                        boolean test = true;
+
                     if(cursor != null && !cursor.isAfterLast())
                     for(j=0; j<15; j++) {
                         recId = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -128,25 +129,44 @@ public class ReceptActivity extends AppCompatActivity{
 
                         Cursor c = db.rawQuery("select productId from combo where _id = " + recipe[i], null);
                         c.moveToFirst();
-                        while (!c.isAfterLast()) {
+
+                    try {
+                        boolean isFirst = true;
+                        c.moveToFirst();
+                        while (c.moveToNext()) {
+                            if(isFirst) {
+                                c.moveToFirst();
+                                isFirst=false;
+                            }
                             if (!isIn(c.getInt(c.getColumnIndex("productId")), chosen))
-                                test = false;
+                                test[i] = true;
                             c.moveToNext();
                         }
+                    } finally {
                         c.close();
+                    }
+
 
                         }
 
-            for(j=0; j<recipe.length;j++ ) {
                 Cursor cu = db.rawQuery("select recName from recipes where _id = " + recipe[j], null);
-                cu.moveToFirst();
 
-                if (recipe[j] !=0 && !cu.isAfterLast()) {
-                    names[numOfFound] = cu.getString(cu.getColumnIndex("recName"));
-                    numOfFound++;
+
+            try {
+                boolean isFirst = true;
+                cu.moveToFirst();
+                while (cu.moveToNext()) {
+                    if(isFirst) {
+                        cu.moveToFirst();
+                        isFirst=false;
+                    }
+                    if (!test[j] && !cu.isAfterLast()) {
+                        names[numOfFound] = cu.getString(cu.getColumnIndex("recName"));
+                        numOfFound++;
+                    }
                 }
-                cu.moveToNext();
-                if(j==recipe.length-1)cu.close();
+            } finally {
+                cu.close();
             }
 
 
@@ -185,9 +205,7 @@ public class ReceptActivity extends AppCompatActivity{
                 }
 
             }
-
-
-
+            
             return  rs;
         }
 
