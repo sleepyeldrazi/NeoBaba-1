@@ -3,25 +3,19 @@ package com.odezsa.konik.neobaba;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 public class ReceptaActivity extends AppCompatActivity {
     int chosen[];
     int id;
     DatabaseHelper myDbHelper;
+
 
 
     @Override
@@ -45,25 +39,35 @@ public class ReceptaActivity extends AppCompatActivity {
         TabHost host = (TabHost)findViewById(R.id.tabHost);
 
         SQLiteDatabase db = myDbHelper.getWritableDatabase();
+        Cursor c = db.rawQuery("select * from recipes where _id =" + id, null);
+        c.moveToFirst();
+        deck2.setText(c.getString(c.getColumnIndex("recDescr")));
+        name.setText(c.getString(c.getColumnIndex("recName")));
+        c.close();
 
         switch(id){
             case 2:
                 img.setImageResource(R.drawable.omlet);
-                name.setText("Омлет");
                 deck.setText(R.string.omlet);
-                Cursor c = db.rawQuery("select recDescr from recipes where _id =" + id, null);
-                c.moveToFirst();
-                deck2.setText(c.getString(c.getColumnIndex("recDescr")));
-                c.close();
+
                 break;
             case 1:
                 img.setImageResource(R.drawable.popara);
-                name.setText("Попара");
                 deck.setText(R.string.popara);
-                Cursor cur = db.rawQuery("select recDescr from recipes where _id =" + id, null);
-                cur.moveToFirst();
-                deck2.setText(cur.getString(cur.getColumnIndex("recDescr")));
-                cur.close();
+                break;
+            case 3:
+                img.setImageResource(R.drawable.fok);
+                deck.setText(R.string.fok);
+                break;
+            case 4:
+                img.setImageResource(R.drawable.hlebqco);
+                deck.setText(R.string.hlebQco);
+                break;
+            case 5:
+                img.setImageResource(R.drawable.guv);
+                deck.setText(R.string.guv);
+                break;
+
 
         }
 
@@ -89,6 +93,12 @@ public class ReceptaActivity extends AppCompatActivity {
 
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+        this.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
     }
 
 }

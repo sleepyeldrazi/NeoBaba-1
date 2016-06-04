@@ -1,6 +1,5 @@
 package com.odezsa.konik.neobaba;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,18 +7,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
-import android.widget.ArrayAdapter;
+
 import android.widget.ListView;
-
-import android.widget.Toast;
-
-import java.util.ArrayList;
-
 
 public class ReceptActivity extends AppCompatActivity{
 
@@ -30,6 +25,7 @@ public class ReceptActivity extends AppCompatActivity{
     int count;
 
     int chosen[];
+    int recipe[];
 
     //Cursor cursor =  db.rawQuery("select * from products where prodName like '" + searchView.getQuery() + "%';" , null);
 
@@ -58,14 +54,12 @@ public class ReceptActivity extends AppCompatActivity{
         Bundle extras = getIntent().getExtras();
         chosen= extras.getIntArray("chosen");
         count = extras.getInt("count");
+        recipe = new int[chosen.length];
 
         myDbHelper = new DatabaseHelper(getApplicationContext());
 
         LoadResults lr = new LoadResults();
         lr.execute();
-
-
-
 
 
         }
@@ -98,6 +92,7 @@ public class ReceptActivity extends AppCompatActivity{
                 getApplicationContext());
 
         public LoadResults(){}
+
         private boolean isIn(int value, int[] array){
             for(int i=0; i<array.length; i++){
                 if(value == array[i]) return true;
@@ -111,36 +106,51 @@ public class ReceptActivity extends AppCompatActivity{
             SQLiteDatabase db = myDbHelper.getWritableDatabase();
             String[] names = new String[10];
             int recId = 0;
-            int recIdOld=0;
             int numOfFound = 0;
             int j=0;
 
 
-                for (int i = 0; i < count; i++) {
-                    Cursor cursor = db.rawQuery("select _id from combo where productId = " + chosen[i], null);
-
-
-                    cursor.moveToFirst();
-                    boolean test = true;
+                for (int i = 0; i < chosen.length; i++) {
+                        Cursor cursor = db.rawQuery("select _id from combo where productId = " + chosen[i], null);
+                        cursor.moveToFirst();
+                        boolean test = true;
                     if(cursor != null && !cursor.isAfterLast())
+                    for(j=0; j<15; j++) {
                         recId = cursor.getInt(cursor.getColumnIndex("_id"));
-                        if(recIdOld == recId) continue;
-                    recIdOld = recId;
-
-                    cursor = db.rawQuery("select productId from combo where _id = " + recId, null);
-                    cursor.moveToFirst();
-                    while (cursor.moveToNext()) {
-                        if (!isIn(cursor.getInt(cursor.getColumnIndex("productId")), chosen))
-                            test = false;
+                        if (isIn(recId, recipe)) continue;
+                        else {
+                            recipe[j] = recId;
+                        }
+                        cursor.moveToNext();
+                        if(cursor.isAfterLast()) break;
                     }
-                    Cursor cu = db.rawQuery("select recName from recipes where _id = " + recId, null);
-                    cu.moveToFirst();
-                    if (test && !cu.isAfterLast()) {
-                        names[numOfFound] = cu.getString(cu.getColumnIndex("recName"));
-                        numOfFound++;
-                    }
+                        cursor.close();
 
+                        Cursor c = db.rawQuery("select productId from combo where _id = " + recipe[i], null);
+                        c.moveToFirst();
+                        while (!c.isAfterLast()) {
+                            if (!isIn(c.getInt(c.getColumnIndex("productId")), chosen))
+                                test = false;
+                            c.moveToNext();
+                        }
+                        c.close();
+
+                        }
+
+            for(j=0; j<recipe.length;j++ ) {
+                Cursor cu = db.rawQuery("select recName from recipes where _id = " + recipe[j], null);
+                cu.moveToFirst();
+
+                if (recipe[j] !=0 && !cu.isAfterLast()) {
+                    names[numOfFound] = cu.getString(cu.getColumnIndex("recName"));
+                    numOfFound++;
                 }
+                cu.moveToNext();
+                if(j==recipe.length-1)cu.close();
+            }
+
+
+
                 //cursor = db.rawQuery("select _id from combo where productId = " + chosen[j], null);
                 //j++;
 
@@ -162,6 +172,16 @@ public class ReceptActivity extends AppCompatActivity{
                         break;
                     case "Попара":
                         rs[i].setImg(R.drawable.popara);
+                        break;
+                    case "Фокачи с доматено пюре и кашкавал":
+                        rs[i].setImg(R.drawable.fok);
+                        break;
+                    case "Сандвич с яйце и сирене":
+                        rs[i].setImg(R.drawable.hlebqco);
+                        break;
+                    case "Сирене с кренвирши в гювече":
+                        rs[i].setImg(R.drawable.guv);
+                        break;
                 }
 
             }
@@ -194,6 +214,17 @@ public class ReceptActivity extends AppCompatActivity{
                 dbConnector.close();
 
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 
